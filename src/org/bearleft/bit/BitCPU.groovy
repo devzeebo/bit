@@ -51,13 +51,13 @@ class BitCPU {
 	void step() {
 		if (!cyclesRemaining) {
 
-			long millis = System.currentTimeMillis()
+//			long millis = System.currentTimeMillis()
 			instructionBytes = memory.getWord(PC.value)
-			println "Instruction load: ${System.currentTimeMillis() - millis}"
+//			println "Instruction load: ${System.currentTimeMillis() - millis}"
 
-			millis = System.currentTimeMillis()
+//			millis = System.currentTimeMillis()
 			currentInstruction = BitInstruction.decodeInstruction(instructionBytes)
-			println "Decode: ${System.currentTimeMillis() - millis}"
+//			println "Decode: ${System.currentTimeMillis() - millis}"
 
 			cyclesRemaining = currentInstruction.cycles
 		}
@@ -67,7 +67,7 @@ class BitCPU {
 			int s, t, u
 			(s, t, u) = currentInstruction.extractArguments(instructionBytes)
 
-			println currentInstruction.class
+//			println currentInstruction.class
 
 			currentInstruction.onExecute(this, s, t, u)
 

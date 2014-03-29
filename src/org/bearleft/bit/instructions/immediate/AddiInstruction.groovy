@@ -12,10 +12,10 @@ class AddiInstruction extends ImmediateInstruction {
 
 	@Override
 	void onExecute(BitCPU cpu, int s, int t, int u) {
-		[s, t].each {
-			println "$it: ${cpu.registers[it]}"
-		}
-		println "U: $u"
+//		[s, t].each {
+//			println "$it: ${cpu.registers[it]}"
+//		}
+//		println "U: $u"
 		cpu.registers[s].value = cpu.registers[t].value + u
 	}
 }

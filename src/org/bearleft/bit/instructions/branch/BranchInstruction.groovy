@@ -13,8 +13,9 @@ abstract class BranchInstruction extends ImmediateInstruction {
 
 	protected static final void branch(boolean cond, BitCPU cpu, int u) {
 		if (cond) {
+//			println "JUMPING: " + "$u".padLeft(16, '0')
 			cpu.JR.value = cpu.PC + 4
-			cpu.PC.value = u
+			cpu.PC.value = u - 4
 		}
 	}
 }

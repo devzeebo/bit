@@ -6,10 +6,18 @@ package org.bearleft.bit
  */
 class Register {
 
-	def value
+	private def value
 
 	Register() {
 		value = 0
+	}
+
+	void setValue(int value) {
+		this.value = value
+	}
+
+	int getValue() {
+		return value
 	}
 
 	def plus(def val) {

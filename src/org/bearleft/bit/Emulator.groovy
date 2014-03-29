@@ -37,7 +37,7 @@ class Emulator {
 	int[] program = [
 		0b001000_00001_00000_0000000010000000,
 		0b000001_00001_00001_00001_00000000000,
-		0b000001_00001_00001_00001_00000000000,
+		0b011101_00000_00000_0000_0000_0000_0000,
 	]
 
 	Emulator saveFile(String file) {
@@ -63,10 +63,18 @@ class Emulator {
 		Emulator emu = new Emulator().saveFile('sample.bit')
 		emu.loadFile('sample.bit')
 
-		emu.cpu.step()
-		emu.cpu.step()
-		emu.cpu.step()
+		for (int x = 0; x < 9; x++) {
+			emu.cpu.step()
+		}
 
-		println emu.cpu.registers
+		long startTime = System.currentTimeMillis()
+		float steps = 0
+
+		while(steps < 10000) {
+			emu.cpu.step()
+			steps += 1
+		}
+
+		println ((System.currentTimeMillis() - startTime) / steps)
 	}
 }

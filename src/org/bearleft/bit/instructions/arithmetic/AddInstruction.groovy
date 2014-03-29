@@ -12,9 +12,9 @@ class AddInstruction extends RegisterInstruction {
 
 	@Override
 	void onExecute(BitCPU cpu, int s, int t, int u) {
-		[s, t, u].each {
-			println "$it: ${cpu.registers[it]}"
-		}
+//		[s, t, u].each {
+//			println "$it: ${cpu.registers[it]}"
+//		}
 		cpu.registers[s].value = cpu.registers[t].value + cpu.registers[u].value
 	}
 }

@@ -69,10 +69,4 @@ abstract class BitInstruction {
 	abstract void onExecute(BitCPU cpu, int s, int t, int u)
 
 	protected abstract def extractArguments(long instruction)
-
-	public static void main(String[] args) {
-
-		long millis = System.currentTimeMillis()
-//		BitInstruction.
-	}
 }
