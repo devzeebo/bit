@@ -34,15 +34,37 @@ class Emulator {
 		return this
 	}
 
+	int[] program = [
+		0b001000_00001_00000_0000000010000000,
+		0b000001_00001_00001_00001_00000000000,
+		0b000001_00001_00001_00001_00000000000,
+	]
+
 	Emulator saveFile(String file) {
+
+		FileOutputStream fos = new FileOutputStream(new File(file))
+		byte[] bytes = new byte[program.length * 4]
+
+		int idx = 0
+		int offset = 0
+
+		while(idx < program.length) {
+			offset = BitIOHelper.writeInstruction(bytes, offset, program[idx++])
+		}
+
+		fos.write(bytes)
+		fos.close()
 
 		return this
 	}
 
 	public static void main(String[] args) {
 
-		Emulator emu = new Emulator().loadFile('sample.bit')
+		Emulator emu = new Emulator().saveFile('sample.bit')
+		emu.loadFile('sample.bit')
 
+		emu.cpu.step()
+		emu.cpu.step()
 		emu.cpu.step()
 
 		println emu.cpu.registers

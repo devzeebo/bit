@@ -67,6 +67,8 @@ class BitCPU {
 			int s, t, u
 			(s, t, u) = currentInstruction.extractArguments(instructionBytes)
 
+			println currentInstruction.class
+
 			currentInstruction.onExecute(this, s, t, u)
 
 			PC.value = PC + 4
