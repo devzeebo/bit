@@ -8,6 +8,10 @@ class Register {
 
 	def value
 
+	Register() {
+		value = 0
+	}
+
 	def plus(def val) {
 		value += val
 		return value
@@ -15,5 +19,9 @@ class Register {
 
 	boolean equals(def other) {
 		return other.class == Register && other.value == value
+	}
+
+	String toString() {
+		return value
 	}
 }

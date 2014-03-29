@@ -1,5 +1,4 @@
 package org.bearleft.bit
-
 /**
  * User: Eric Siebeneich
  * Date: 3/29/14
@@ -46,15 +45,20 @@ class BitCPU {
 	}
 
 	int cyclesRemaining
-	long instructionBytes
+	int instructionBytes
 	BitInstruction currentInstruction
 
 	void step() {
 		if (!cyclesRemaining) {
 
+			long millis = System.currentTimeMillis()
 			instructionBytes = memory.getWord(PC.value)
+			println "Instruction load: ${System.currentTimeMillis() - millis}"
 
+			millis = System.currentTimeMillis()
 			currentInstruction = BitInstruction.decodeInstruction(instructionBytes)
+			println "Decode: ${System.currentTimeMillis() - millis}"
+
 			cyclesRemaining = currentInstruction.cycles
 		}
 		cyclesRemaining--

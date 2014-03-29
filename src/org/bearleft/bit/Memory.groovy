@@ -1,13 +1,14 @@
 package org.bearleft.bit
 
+import org.bearleft.bit.io.BitIOHelper
+
 /**
  * User: Eric Siebeneich
  * Date: 3/29/14
  */
 class Memory {
 
-	static final int INT_MASK =  0x00000000_FFFFFFFF
-	static final int BYTE_MASK = 0x00000000_000000FF
+	static final int BYTE_MASK = 0x000000FF
 
 	static final int MAX_MEMORY = 32768
 
@@ -19,26 +20,20 @@ class Memory {
 		bytes = new byte[Math.min(size, MAX_MEMORY)]
 	}
 
-	long getWord(int address) {
-		long ret = bytes[address++] << 24
-		ret |= bytes[address++] << 16
-		ret |= bytes[address++] << 8
-		ret |= bytes[address]
+	int getWord(int address) {
+		int ret = BitIOHelper.readInstruction(bytes, address)[0]
 
-		return ret & INT_MASK
+		return ret
 	}
 
-	long getByte(int address) {
-		long ret = bytes[address]
+	int getByte(int address) {
+		int ret = bytes[address]
 
-		return ret & BYTE_MASK
+		return ret
 	}
 
 	void storeWord(int address, long value) {
-		bytes[address++] = value >> 24
-		bytes[address++] = (value >> 16) & BYTE_MASK
-		bytes[address++] = (value >> 8) & BYTE_MASK
-		bytes[address] = (value) & BYTE_MASK
+		BitIOHelper.writeInstruction(bytes, address, value as int)
 	}
 
 	void storeByte(int address, long value) {

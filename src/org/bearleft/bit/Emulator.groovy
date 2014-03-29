@@ -1,6 +1,6 @@
 package org.bearleft.bit
 
-import org.bearleft.bit.file.BitIOHelper
+import org.bearleft.bit.io.BitIOHelper
 
 /**
  * User: Eric Siebeneich
@@ -14,32 +14,37 @@ class Emulator {
 		cpu = new BitCPU()
 	}
 
-	void loadFile(String file) {
+	Emulator loadFile(String file) {
+
+		byte[] buffer = new byte[10000]
 
 		FileInputStream fis = new FileInputStream(new File(file))
-		byte[] bytes = new byte[4]
 
-		fis.read(bytes)
-		fis.close()
+		int offset = 0
+		int count
+
+		while ((count = fis.read(buffer)) != -1) {
+
+			println count
+			println BitIOHelper.getInstructionBits(BitIOHelper.readInstruction(buffer, 0)[0])
+
+			System.arraycopy(buffer, 0, cpu.memory.bytes, offset, count)
+			offset += count
+		}
+		return this
 	}
 
-	void saveFile(String file) {
+	Emulator saveFile(String file) {
 
-		FileOutputStream fos = new FileOutputStream(new File(file))
-		byte[] bytes = new byte[4]
-
-		int instruction = 0b001000_00000_00001_0000_0000_1000_0000
-		bytes[0] = (instruction >> 24) & 0x000000FF
-		bytes[1] = (instruction >> 16) & 0x000000FF
-		bytes[2] = (instruction >>  8) & 0x000000FF
-		bytes[3] = instruction & 0x000000FF
-
-		fos.write(bytes)
-		fos.close()
+		return this
 	}
 
 	public static void main(String[] args) {
 
-		println BitIOHelper.getInstructionBits(0b001000_00000_00001_0000_0000_1000_0000)
+		Emulator emu = new Emulator().loadFile('sample.bit')
+
+		emu.cpu.step()
+
+		println emu.cpu.registers
 	}
 }

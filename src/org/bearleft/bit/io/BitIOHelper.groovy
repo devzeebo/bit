@@ -1,4 +1,4 @@
-package org.bearleft.bit.file
+package org.bearleft.bit.io
 
 /**
  * User: Eric Siebeneich

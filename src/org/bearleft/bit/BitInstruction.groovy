@@ -1,31 +1,9 @@
 package org.bearleft.bit
 
 import org.bearleft.bit.instructions.NoopInstruction
-import org.bearleft.bit.instructions.arithmetic.AddInstruction
-import org.bearleft.bit.instructions.arithmetic.AndInstruction
-import org.bearleft.bit.instructions.arithmetic.DivInstruction
-import org.bearleft.bit.instructions.arithmetic.MultInstruction
-import org.bearleft.bit.instructions.arithmetic.OrInstruction
-import org.bearleft.bit.instructions.arithmetic.SllInstruction
-import org.bearleft.bit.instructions.arithmetic.SraInstruction
-import org.bearleft.bit.instructions.arithmetic.SrlInstruction
-import org.bearleft.bit.instructions.arithmetic.SubInstruction
-import org.bearleft.bit.instructions.arithmetic.XorInstruction
-import org.bearleft.bit.instructions.branch.BeqInstruction
-import org.bearleft.bit.instructions.branch.BgtInstruction
-import org.bearleft.bit.instructions.branch.BgteInstruction
-import org.bearleft.bit.instructions.branch.BltInstruction
-import org.bearleft.bit.instructions.branch.BlteInstruction
-import org.bearleft.bit.instructions.branch.BneInstruction
-import org.bearleft.bit.instructions.branch.ElseInstruction
-import org.bearleft.bit.instructions.branch.JumpInstruction
-import org.bearleft.bit.instructions.immediate.AddiInstruction
-import org.bearleft.bit.instructions.immediate.AndiInstruction
-import org.bearleft.bit.instructions.immediate.DiviInstruction
-import org.bearleft.bit.instructions.immediate.MultiInstruction
-import org.bearleft.bit.instructions.immediate.OriInstruction
-import org.bearleft.bit.instructions.immediate.SubiInstruction
-import org.bearleft.bit.instructions.immediate.XoriInstruction
+import org.bearleft.bit.instructions.arithmetic.*
+import org.bearleft.bit.instructions.branch.*
+import org.bearleft.bit.instructions.immediate.*
 import org.bearleft.bit.instructions.memory.LbInstruction
 import org.bearleft.bit.instructions.memory.LwInstruction
 import org.bearleft.bit.instructions.memory.SbInstruction
@@ -43,7 +21,7 @@ abstract class BitInstruction {
 	protected static final int REGISTER_3_MASK = 0b000000_00000_00000_11111_00000000000
 	protected static final int IMMEDIATE_MASK = 0b000000_00000_00000_1111_1111_1111_1111
 
-	private static final def INSTRUCTION_MAP = [
+	/*private static final def INSTRUCTION_MAP = [
 			0b000000: new NoopInstruction(),
 			0b000001: new AddInstruction(),
 			0b000010: new SubInstruction(),
@@ -76,9 +54,43 @@ abstract class BitInstruction {
 			0b011100: new SraInstruction(),
 			0b011101: new JumpInstruction(),
 //			0b111111: SyscallInstruction
+	]*/
+	
+	private static final BitInstruction[] INSTRUCTION_MAP = [
+			new NoopInstruction(),
+			new AddInstruction(),
+			new SubInstruction(),
+			new DivInstruction(),
+			new MultInstruction(),
+			new AndInstruction(),
+			new OrInstruction(),
+			new XorInstruction(),
+
+			new AddiInstruction(),
+			new SubiInstruction(),
+			new DiviInstruction(),
+			new MultiInstruction(),
+			new AndiInstruction(),
+			new OriInstruction(),
+			new XoriInstruction(),
+			new BeqInstruction(),
+			new BneInstruction(),
+			new BltInstruction(),
+			new BlteInstruction(),
+			new BgtInstruction(),
+			new BgteInstruction(),
+			new ElseInstruction(),
+			new LwInstruction(),
+			new SwInstruction(),
+			new LbInstruction(),
+			new SbInstruction(),
+			new SllInstruction(),
+			new SrlInstruction(),
+			new SraInstruction(),
+			new JumpInstruction(),
 	]
 
-	static BitInstruction decodeInstruction(long instructionInt) {
+	static BitInstruction decodeInstruction(int instructionInt) {
 		return INSTRUCTION_MAP[(instructionInt & INSTRUCTION_MASK) >>> 26]
 	}
 
