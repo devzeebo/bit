@@ -1,133 +1,96 @@
 package org.bearleft.bit
 
+import org.bearleft.bit.instructions.NoopInstruction
+import org.bearleft.bit.instructions.arithmetic.AddInstruction
+import org.bearleft.bit.instructions.arithmetic.AndInstruction
+import org.bearleft.bit.instructions.arithmetic.DivInstruction
+import org.bearleft.bit.instructions.arithmetic.MultInstruction
+import org.bearleft.bit.instructions.arithmetic.OrInstruction
+import org.bearleft.bit.instructions.arithmetic.SllInstruction
+import org.bearleft.bit.instructions.arithmetic.SraInstruction
+import org.bearleft.bit.instructions.arithmetic.SrlInstruction
+import org.bearleft.bit.instructions.arithmetic.SubInstruction
+import org.bearleft.bit.instructions.arithmetic.XorInstruction
+import org.bearleft.bit.instructions.branch.BeqInstruction
+import org.bearleft.bit.instructions.branch.BgtInstruction
+import org.bearleft.bit.instructions.branch.BgteInstruction
+import org.bearleft.bit.instructions.branch.BltInstruction
+import org.bearleft.bit.instructions.branch.BlteInstruction
+import org.bearleft.bit.instructions.branch.BneInstruction
+import org.bearleft.bit.instructions.branch.ElseInstruction
+import org.bearleft.bit.instructions.branch.JumpInstruction
+import org.bearleft.bit.instructions.immediate.AddiInstruction
+import org.bearleft.bit.instructions.immediate.AndiInstruction
+import org.bearleft.bit.instructions.immediate.DiviInstruction
+import org.bearleft.bit.instructions.immediate.MultiInstruction
+import org.bearleft.bit.instructions.immediate.OriInstruction
+import org.bearleft.bit.instructions.immediate.SubiInstruction
+import org.bearleft.bit.instructions.immediate.XoriInstruction
+import org.bearleft.bit.instructions.memory.LbInstruction
+import org.bearleft.bit.instructions.memory.LwInstruction
+import org.bearleft.bit.instructions.memory.SbInstruction
+import org.bearleft.bit.instructions.memory.SwInstruction
+
 /**
  * User: Eric Siebeneich
  * Date: 3/20/14
  */
 abstract class BitInstruction {
 
-	private static final int INSTRUCTION_MASK = 0b111111_00000_00000_00000_00000000000
-	private static final int REGISTER_1_MASK = 0b000000_11111_00000_00000_00000000000
-	private static final int REGISTER_2_MASK = 0b000000_00000_11111_00000_00000000000
-	private static final int REGISTER_3_MASK = 0b000000_00000_00000_11111_00000000000
-	private static final int IMMEDIATE_MASK = 0b000000_00000_00000_1111_1111_1111_1111
+	protected static final int INSTRUCTION_MASK = 0b111111_00000_00000_00000_00000000000
+	protected static final int REGISTER_1_MASK = 0b000000_11111_00000_00000_00000000000
+	protected static final int REGISTER_2_MASK = 0b000000_00000_11111_00000_00000000000
+	protected static final int REGISTER_3_MASK = 0b000000_00000_00000_11111_00000000000
+	protected static final int IMMEDIATE_MASK = 0b000000_00000_00000_1111_1111_1111_1111
 
-//	@Newify(BitInstruction)
-//	private static final def INSTRUCTION_MAP = [
-//			0b000000: BitInstruction('NOOP', 1, null),
-//			0b000001: BitInstruction('ADD', 2) { s, t, u ->
-//				registers[s] = registers[t] + registers[u]
-//			},
-//			0b000010: BitInstruction('SUB', 2) { s, t, u ->
-//				registers[s] = registers[t] - registers[u]
-//			},
-//			0b000011: BitInstruction('DIV', 2) { s, t, u ->
-//				registers[s] = registers[t] / registers[u]
-//			},
-//			0b000100: BitInstruction('MULT', 2) { s, t, u ->
-//				registers[s] = registers[t] * registers[u]
-//			},
-//			0b000101: BitInstruction('AND', 2) { s, t, u ->
-//				registers[s] = registers[t] & registers[u]
-//			},
-//			0b000110: BitInstruction('OR', 2) { s, t, u ->
-//				registers[s] = registers[t] | registers[u]
-//			},
-//			0b000111: BitInstruction('XOR', 2) { s, t, u ->
-//				registers[s] = registers[t] ^ registers[u]
-//			},
-//
-//			0b001000: BitInstruction('ADDI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] + immediate
-//			},
-//			0b001001: BitInstruction('SUBI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b001010: BitInstruction('DIVI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] / immediate
-//			},
-//			0b001011: BitInstruction('MULTI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] * immediate
-//			},
-//			0b001100: BitInstruction('ANDI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] & immediate
-//			},
-//			0b001101: BitInstruction('ORI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] | immediate
-//			},
-//			0b001110: BitInstruction('XORI', 2) { s, t, immediate ->
-//				registers[s] = registers[t] ^ immediate
-//			},
-//			0b001111: BitInstruction('BEQ', 2) { s, t, immediate ->
-//				if (registers[s] == registers[t]) {
-//					registers[BitCPU.JUMP_REGISTER] = registers[BitCPU.INSTRUCTION_POINTER] + 4
-//					registers[BitCPU.INSTRUCTION_POINTER] = immediate
-//				}
-//			},
-//			0b010000: BitInstruction('BNE', 2) { s, t, immediate ->
-//				if (registers[s] != registers[t]) {
-//					registers[BitCPU.JUMP_REGISTER] = registers[BitCPU.INSTRUCTION_POINTER] + 4
-//					registers[BitCPU.INSTRUCTION_POINTER] = immediate
-//				}
-//			},
-//			0b010001: BitInstruction('BLT', 2) { s, t, immediate ->
-//				if (registers[s] < registers[t]) {
-//					registers[BitCPU.JUMP_REGISTER] = registers[BitCPU.INSTRUCTION_POINTER] + 4
-//					registers[BitCPU.INSTRUCTION_POINTER] = immediate
-//				}
-//			},
-//			0b010010: BitInstruction('BLTE', 2) { s, t, immediate ->
-//				if (registers[s] <= registers[t]) {
-//					jumpAndLink(immediate)
-//				}
-//			},
-//			0b010011: BitInstruction('BGT', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b010100: BitInstruction('BGTE', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b010101: BitInstruction('ELSE', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b010110: BitInstruction('LW', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b010111: BitInstruction('SW', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011000: BitInstruction('LB', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011001: BitInstruction('SB', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011010: BitInstruction('SLL', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011011: BitInstruction('SRL', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011100: BitInstruction('SRA', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b011101: BitInstruction('JUMP', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			},
-//			0b111111: BitInstruction('SYSCALL', 2) { s, t, immediate ->
-//				registers[s] = registers[t] - immediate
-//			}
-//	]
+	private static final def INSTRUCTION_MAP = [
+			0b000000: new NoopInstruction(),
+			0b000001: new AddInstruction(),
+			0b000010: new SubInstruction(),
+			0b000011: new DivInstruction(),
+			0b000100: new MultInstruction(),
+			0b000101: new AndInstruction(),
+			0b000110: new OrInstruction(),
+			0b000111: new XorInstruction(),
 
-	def extractInstruction(int instructionInt) {
-//		String instruction = INSTRUCTION_MAP[(instructionInt & INSTRUCTION_MASK) >>> 26]
+			0b001000: new AddiInstruction(),
+			0b001001: new SubiInstruction(),
+			0b001010: new DiviInstruction(),
+			0b001011: new MultiInstruction(),
+			0b001100: new AndiInstruction(),
+			0b001101: new OriInstruction(),
+			0b001110: new XoriInstruction(),
+			0b001111: new BeqInstruction(),
+			0b010000: new BneInstruction(),
+			0b010001: new BltInstruction(),
+			0b010010: new BlteInstruction(),
+			0b010011: new BgtInstruction(),
+			0b010100: new BgteInstruction(),
+			0b010101: new ElseInstruction(),
+			0b010110: new LwInstruction(),
+			0b010111: new SwInstruction(),
+			0b011000: new LbInstruction(),
+			0b011001: new SbInstruction(),
+			0b011010: new SllInstruction(),
+			0b011011: new SrlInstruction(),
+			0b011100: new SraInstruction(),
+			0b011101: new JumpInstruction(),
+//			0b111111: SyscallInstruction
+	]
+
+	static BitInstruction decodeInstruction(long instructionInt) {
+		return INSTRUCTION_MAP[(instructionInt & INSTRUCTION_MASK) >>> 26]
 	}
+
+	int cycles
 
 	BitInstruction(int cycles) {
-
+		this.cycles = cycles
 	}
 
-	abstract void onExecute(BitCPU cpu, int s, int t, def u);
+	abstract void onExecute(BitCPU cpu, int s, int t, int u)
+
+	protected abstract def extractArguments(long instruction)
 
 	public static void main(String[] args) {
 		extractInstruction(0b010110_00101_00001_00100_00000000000)

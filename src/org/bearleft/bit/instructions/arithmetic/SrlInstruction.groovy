@@ -1,18 +1,19 @@
 package org.bearleft.bit.instructions.arithmetic
 import org.bearleft.bit.BitCPU
-import org.bearleft.bit.BitInstruction
+import org.bearleft.bit.instructions.immediate.ImmediateInstruction
+
 /**
  * User: Eric Siebeneich
  * Date: 3/29/14
  */
-class SrlInstruction extends BitInstruction {
+class SrlInstruction extends ImmediateInstruction {
 
 	SrlInstruction() {
 		super(1)
 	}
 
 	@Override
-	void onExecute(BitCPU cpu, int s, int t, def u) {
+	void onExecute(BitCPU cpu, int s, int t, int u) {
 		cpu.registers[s].value = cpu.registers[t].value >>> u
 	}
 }

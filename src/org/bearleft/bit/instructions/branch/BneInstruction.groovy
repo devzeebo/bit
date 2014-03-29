@@ -13,7 +13,7 @@ class BneInstruction extends BranchInstruction {
 	}
 
 	@Override
-	void onExecute(BitCPU cpu, int s, int t, def u) {
+	void onExecute(BitCPU cpu, int s, int t, int u) {
 		branch(cpu.registers[s] != cpu.registers[t], cpu, u)
 	}
 }

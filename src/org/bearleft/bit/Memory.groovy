@@ -12,8 +12,10 @@ class Memory {
 	static final int MAX_MEMORY = 32768
 
 	private byte[] bytes
+	int size
 
 	Memory(int size) {
+		this.size = size
 		bytes = new byte[Math.min(size, MAX_MEMORY)]
 	}
 

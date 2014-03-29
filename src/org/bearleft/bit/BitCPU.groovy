@@ -18,6 +18,16 @@ class BitCPU {
 		return registers[JUMP_REGISTER]
 	}
 
+	private static final int SP_REGISTER = 29
+	Register getSP() {
+		return registers[SP_REGISTER]
+	}
+
+	private static final int FP_REGISTER = 30
+	Register getFP() {
+		return registers[FP_REGISTER]
+	}
+
 	Memory memory
 
 	BitCPU() {
@@ -28,6 +38,34 @@ class BitCPU {
 
 		for(int i = 0; i < 33; i++) {
 			registers.add(new Register())
+		}
+
+		// Set the stack and frame pointer to the end of memory space
+		FP.value = memory.size - 4
+		SP.value = FP.value
+	}
+
+	int cyclesRemaining
+	long instructionBytes
+	BitInstruction currentInstruction
+
+	void step() {
+		if (!cyclesRemaining) {
+
+			instructionBytes = memory.getWord(PC.value)
+
+			currentInstruction = BitInstruction.decodeInstruction(instructionBytes)
+			cyclesRemaining = currentInstruction.cycles
+		}
+		cyclesRemaining--
+
+		if (!cyclesRemaining) {
+			int s, t, u
+			(s, t, u) = currentInstruction.extractArguments(instructionBytes)
+
+			currentInstruction.onExecute(this, s, t, u)
+
+			PC.value = PC + 4
 		}
 	}
 }

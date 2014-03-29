@@ -11,7 +11,7 @@ class ElseInstruction extends BranchInstruction {
 	}
 
 	@Override
-	void onExecute(BitCPU cpu, int s, int t, def u) {
+	void onExecute(BitCPU cpu, int s, int t, int u) {
 		branch(cpu.JR != cpu.PC, cpu, u)
 	}
 }

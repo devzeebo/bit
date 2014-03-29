@@ -14,6 +14,10 @@ class NoopInstruction extends BitInstruction {
 	}
 
 	@Override
-	void onExecute(BitCPU cpu, int s, int t, def u) {
+	void onExecute(BitCPU cpu, int s, int t, int u) {
+	}
+
+	def extractArguments(long instruction) {
+		return [0, 0, 0]
 	}
 }

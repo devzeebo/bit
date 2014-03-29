@@ -1,18 +1,17 @@
 package org.bearleft.bit.instructions.arithmetic
 import org.bearleft.bit.BitCPU
-import org.bearleft.bit.BitInstruction
 /**
  * User: Eric Siebeneich
  * Date: 3/29/14
  */
-class MultInstruction extends BitInstruction {
+class MultInstruction extends RegisterInstruction {
 
 	MultInstruction() {
 		super(1)
 	}
 
 	@Override
-	void onExecute(BitCPU cpu, int s, int t, def u) {
+	void onExecute(BitCPU cpu, int s, int t, int u) {
 		cpu.registers[s].value = cpu.registers[s].value * cpu.registers[u].value
 	}
 }
