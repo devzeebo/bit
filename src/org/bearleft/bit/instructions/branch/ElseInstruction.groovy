@@ -14,4 +14,9 @@ class ElseInstruction extends BranchInstruction {
 	void onExecute(BitCPU cpu, int s, int t, int u) {
 		branch(cpu.JR != cpu.PC, cpu, u)
 	}
+
+	@Override
+	int encodeArguments(String arguments) {
+		return (arguments.trim() as int) & IMMEDIATE_MASK
+	}
 }
