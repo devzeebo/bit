@@ -65,7 +65,7 @@ class BitCPU {
 
 		if (!cyclesRemaining) {
 			int s, t, u
-			(s, t, u) = currentInstruction.extractArguments(instructionBytes)
+			(s, t, u) = currentInstruction.decodeArguments(instructionBytes)
 
 //			println currentInstruction.class
 

@@ -17,7 +17,11 @@ class NoopInstruction extends BitInstruction {
 	void onExecute(BitCPU cpu, int s, int t, int u) {
 	}
 
-	def extractArguments(long instruction) {
+	def decodeArguments(long instruction) {
 		return [0, 0, 0]
+	}
+
+	int encodeArguments(String arguments) {
+		return 0
 	}
 }

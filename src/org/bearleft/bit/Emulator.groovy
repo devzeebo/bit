@@ -35,8 +35,9 @@ class Emulator {
 	}
 
 	int[] program = [
-		0b001000_00001_00000_0000000010000000,
-		0b000001_00001_00001_00001_00000000000,
+			0b00100000001000000000000000010100,
+			0b00001000001000000000000000000000,
+			0b00101000001000010000000000001010,
 		0b011101_00000_00000_0000_0000_0000_0000,
 	]
 
@@ -60,21 +61,18 @@ class Emulator {
 
 	public static void main(String[] args) {
 
-		Emulator emu = new Emulator().saveFile('sample.bit')
+		InputStreamReader reader = new InputStreamReader(System.in)
+		int numCommands = reader.readLine() as int
+
+		Emulator emu = new Emulator()
+		emu.program = BitAssembler.assembleProgram(numCommands, reader)
+
+		emu.saveFile('sample.bit')
 		emu.loadFile('sample.bit')
 
-		for (int x = 0; x < 9; x++) {
+		for(int i = 0; i < emu.program.length; i++) {
 			emu.cpu.step()
+			println Arrays.toString(emu.cpu.registers)
 		}
-
-		long startTime = System.currentTimeMillis()
-		float steps = 0
-
-		while(steps < 10000) {
-			emu.cpu.step()
-			steps += 1
-		}
-
-		println ((System.currentTimeMillis() - startTime) / steps)
 	}
 }

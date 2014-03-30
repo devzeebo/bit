@@ -60,6 +60,12 @@ abstract class BitInstruction {
 		return INSTRUCTION_MAP[(instructionInt & INSTRUCTION_MASK) >>> 26]
 	}
 
+	static def encodeInstruction(String instruction) {
+		instruction = instruction.toLowerCase()
+		Map.Entry<Integer, BitInstruction> entry = INSTRUCTION_MAP.find { it.value.class.simpleName.replace('Instruction', '').toLowerCase() == instruction }
+		return [entry.key, entry.value]
+	}
+
 	int cycles
 
 	BitInstruction(int cycles) {
@@ -68,5 +74,7 @@ abstract class BitInstruction {
 
 	abstract void onExecute(BitCPU cpu, int s, int t, int u)
 
-	protected abstract def extractArguments(long instruction)
+	protected abstract def decodeArguments(long instruction)
+
+	protected abstract int encodeArguments(String arguments)
 }

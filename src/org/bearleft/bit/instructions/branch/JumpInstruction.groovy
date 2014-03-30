@@ -1,4 +1,5 @@
 package org.bearleft.bit.instructions.branch
+
 import org.bearleft.bit.BitCPU
 /**
  * User: Eric Siebeneich
@@ -13,5 +14,11 @@ class JumpInstruction extends BranchInstruction {
 	@Override
 	void onExecute(BitCPU cpu, int s, int t, int u) {
 		branch(true, cpu, u)
+	}
+
+	@Override
+	protected int encodeArguments(String arguments) {
+
+		return (arguments.trim() as int) & IMMEDIATE_MASK
 	}
 }

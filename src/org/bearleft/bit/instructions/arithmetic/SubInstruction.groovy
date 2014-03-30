@@ -12,6 +12,6 @@ class SubInstruction extends RegisterInstruction {
 
 	@Override
 	void onExecute(BitCPU cpu, int s, int t, int u) {
-		cpu.registers[s].value = cpu.registers[s].value - cpu.registers[u].value
+		cpu.registers[s].value = cpu.registers[t].value - cpu.registers[u].value
 	}
 }
