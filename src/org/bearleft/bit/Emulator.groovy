@@ -61,14 +61,11 @@ class Emulator {
 
 	public static void main(String[] args) {
 
-		InputStreamReader reader = new InputStreamReader(System.in)
-		int numCommands = reader.readLine() as int
-
 		Emulator emu = new Emulator()
-		emu.program = BitAssembler.assembleProgram(numCommands, reader)
+		emu.program = BitAssembler.assembleProgram(4, new FileReader(new File('sample.bit')))
 
-		emu.saveFile('sample.bit')
-		emu.loadFile('sample.bit')
+		emu.saveFile('sampleBits.bit')
+		emu.loadFile('sampleBits.bit')
 
 		for(int i = 0; i < emu.program.length; i++) {
 			emu.cpu.step()

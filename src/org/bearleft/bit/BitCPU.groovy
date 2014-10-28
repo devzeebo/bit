@@ -57,6 +57,7 @@ class BitCPU {
 
 //			millis = System.currentTimeMillis()
 			currentInstruction = BitInstruction.decodeInstruction(instructionBytes)
+//			println currentInstruction
 //			println "Decode: ${System.currentTimeMillis() - millis}"
 
 			cyclesRemaining = currentInstruction.cycles
