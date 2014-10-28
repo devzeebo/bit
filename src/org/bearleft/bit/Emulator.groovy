@@ -62,8 +62,11 @@ class Emulator {
 	public static void main(String[] args) {
 
 		Emulator emu = new Emulator()
-		emu.program = BitAssembler.assembleProgram(4, new FileReader(new File('sample.bit')))
 
+		println 'Assembling...'
+		emu.program = BitAssembler.assembleProgram(3, new FileReader(new File('sample.bit')))
+
+		println 'Done'
 		emu.saveFile('sampleBits.bit')
 		emu.loadFile('sampleBits.bit')
 
